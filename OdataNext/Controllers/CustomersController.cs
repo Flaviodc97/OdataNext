@@ -18,12 +18,12 @@ namespace OdataNext.Controllers
            
         }
 
-        
 
         [EnableQuery]
-        public ActionResult Get() 
+        public async Task<ActionResult> Get() 
         {
-           return Ok();
+           var allCustomers = await _context.Customer.ToListAsync();
+           return Ok(allCustomers);
         }
 
         [EnableQuery]
