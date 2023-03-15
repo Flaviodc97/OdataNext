@@ -18,11 +18,53 @@ namespace OdataNext.Controllers
            
         }
 
+        
+        public ActionResult Post([FromBody] Customer customer) 
+        {
+            _context.Add(customer);
+            _context.SaveChanges();
+            return Created(customer);
+            
+        }
+
+        public ActionResult Put([FromRoute] int key, [FromBody] Customer updatedCustomer)
+        {
+            var customer = _context.Customer.SingleOrDefault(d => d.Id == key);
+
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            customer.Name = updatedCustomer.Name;
+            customer.Surname = updatedCustomer.Surname;
+            customer.Address = updatedCustomer.Address;
+
+            _context.SaveChanges();
+
+            return Updated(customer);
+        }
+
+        public ActionResult Delete([FromRoute] int key)
+        {
+            var customer = _context.Customer.SingleOrDefault(d => d.Id == key);
+
+            if (customer != null)
+            {
+                _context.Customer.Remove(customer);
+            }
+
+            _context.SaveChanges();
+
+            return NoContent();
+        }
+
+        
 
         [EnableQuery]
         public async Task<ActionResult> Get() 
         {
-           var allCustomers = await _context.Customer.ToListAsync();
+           var allCustomers = await _context.Customer.Include(c => c.Orders).ToListAsync();
            return Ok(allCustomers);
         }
 

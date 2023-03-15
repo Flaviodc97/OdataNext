@@ -15,7 +15,7 @@ modelBuilder.EntitySet<Customer>("Customers");
 builder.Services.AddControllers().AddOData(
 
     options => options.Select().Filter().OrderBy().Expand().Count().Expand().Count().SetMaxTop(null).AddRouteComponents(
-        "odata",
+        routePrefix: "odata",
         modelBuilder.GetEdmModel()));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
